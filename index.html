@@ -111,7 +111,7 @@ body.repo-drawer-open{overflow:hidden}
 .repo-video-actions a{color:#8abfff;text-decoration:underline;font-size:12px}
 .repo-video-empty{padding:14px;border:1px dashed #42506a;border-radius:10px;color:var(--muted);font-size:13px;margin-top:10px}
 </style></head>
-<body><div class="app"><aside class="sidebar"><div class="brand"><div class="logo">R</div><div><b>REPO RADAR</b><small>AI RESEARCH SYSTEM · V2.6</small></div></div><div class="navlabel">WORKSPACE</div><button class="nav active" data-view="dashboard" title="Dashboard">◈ <span>Dashboard</span></button><button class="nav" data-view="explore" title="Xếp hạng">▤ <span>Xếp hạng Repo</span></button><button class="nav" data-view="favorites" title="Theo dõi">☆ <span>Đang theo dõi</span></button><button class="nav" data-view="office" title="Trung tâm 3D">▧ <span>Trung tâm AI 3D</span></button><button class="nav" data-view="settings" title="Giao diện">⚙ <span>Cài đặt & Màu sắc</span></button><div class="spacer"></div><div class="sidebottom"><div class="online">FREE / PUBLIC API</div><div class="sub" style="font-size:11px;margin-top:7px">Không cần Ollama • Lưu cục bộ</div></div></aside>
+<body><div class="app"><aside class="sidebar"><div class="brand"><div class="logo">R</div><div><b>REPO RADAR</b><small>AI RESEARCH SYSTEM · V2.7</small></div></div><div class="navlabel">WORKSPACE</div><button class="nav active" data-view="dashboard" title="Dashboard">◈ <span>Dashboard</span></button><button class="nav" data-view="explore" title="Xếp hạng">▤ <span>Xếp hạng Repo</span></button><button class="nav" data-view="favorites" title="Theo dõi">☆ <span>Đang theo dõi</span></button><button class="nav" data-view="office" title="Trung tâm 3D">▧ <span>Trung tâm AI 3D</span></button><button class="nav" data-view="settings" title="Giao diện">⚙ <span>Cài đặt & Màu sắc</span></button><div class="spacer"></div><div class="sidebottom"><div class="online">FREE / PUBLIC API</div><div class="sub" style="font-size:11px;margin-top:7px">Không cần Ollama • Lưu cục bộ</div></div></aside>
 <main class="main"><div class="top"><div class="crumb">REPO RADAR <span style="color:var(--accent)">/</span> <strong id="breadcrumb">Dashboard</strong></div><div class="topright"><span class="topdate" id="currentDate"></span><span class="pill" id="apiStatus">GitHub API • Chưa tải</span><button class="btn small" id="refreshTop">↻ Làm mới</button></div></div>
 <section id="dashboard" class="view"><div class="heading"><div><div class="eyebrow">DISCOVER · ANALYZE · TRACK</div><h1>Khám phá <span>AI mã nguồn mở.</span></h1><p class="sub">Theo dõi xu hướng GitHub, phân tích dự án và lưu danh sách nghiên cứu trên một giao diện.</p></div><button class="btn primary" onclick="showView('explore')">Khám phá repo →</button></div>
 <div class="cards"><div class="card"><div class="kicker">Repo đang hiển thị</div><div class="kpi" id="statRepo">—</div><div class="statfoot">Từ GitHub API / bộ lọc hiện tại</div></div><div class="card"><div class="kicker">Tổng sao của tập dữ liệu</div><div class="kpi" id="statStars">—</div><div class="statfoot">Không phải số sao tăng tuần</div></div><div class="card"><div class="kicker">Repo đang theo dõi</div><div class="kpi" id="statFav">0</div><div class="statfoot">Lưu trên trình duyệt</div></div><div class="card"><div class="kicker">Cập nhật lần cuối</div><div class="kpi" style="font-size:20px" id="statTime">—</div><div class="statfoot">Dữ liệu mới khi nhấn làm mới</div></div></div>
@@ -128,9 +128,11 @@ body.repo-drawer-open{overflow:hidden}
 <p class="sub" style="margin-bottom:13px">Dùng Cloudflare Worker làm trung gian. Gemini API key chỉ lưu dạng Secret trên Cloudflare, không đặt vào GitHub hay trình duyệt.</p>
 <div class="airow"><input id="workerUrl" class="inputbox" autocomplete="off" spellcheck="false" placeholder="https://ai-repo-radar-api.TAI-KHOAN.workers.dev" aria-label="Địa chỉ Cloudflare Worker"><input id="workerToken" type="password" autocomplete="off" spellcheck="false" class="inputbox" placeholder="Mã truy cập riêng (không phải Gemini API key)" aria-label="Mã truy cập riêng"></div>
 <div class="airow"><button class="btn primary" id="saveWorker" type="button">Lưu kết nối trên thiết bị này</button><button class="btn small" id="clearWorker" type="button">Xóa kết nối</button><input id="geminiModel" class="inputbox" style="max-width:245px" value="gemini-3.8-flash" placeholder="Tên model Gemini" aria-label="Tên model"></div>
-<div class="notice">🔒 Bạn chỉ nhập địa chỉ Worker và mã truy cập riêng <b>một lần trên mỗi máy/iPhone</b> (miễn là không xóa dữ liệu website). Mã truy cập lưu trong localStorage: người có quyền truy cập thiết bị hoặc mã độc chạy cùng website có thể đọc được. Không dùng trên máy lạ. <b>Không dán Gemini API key vào đây.</b> Đây là công cụ cá nhân, không phải hệ thống đăng nhập nhiều người.</div>
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0 12px"><span class="pill" id="savedConnectionStatus" role="status">Đang kiểm tra kết nối đã lưu…</span><button class="btn small" id="testWorker" type="button">◎ Kiểm tra kết nối Worker</button></div>
+<div id="workerDiagnostics" class="notice" style="display:none;white-space:pre-wrap" aria-live="polite"></div>
+<div class="notice">🔒 Kết nối Worker, mã truy cập riêng và tên model sẽ <b>tự khôi phục khi mở lại website trên cùng thiết bị</b>. Bạn chỉ cần bấm Lưu một lần trên mỗi máy/iPhone (miễn là không xóa dữ liệu website). Mã truy cập lưu trong localStorage: người có quyền truy cập thiết bị hoặc mã độc chạy cùng website có thể đọc được. Không dùng trên máy lạ. <b>Không dán Gemini API key vào đây.</b> Đây là công cụ cá nhân, không phải hệ thống đăng nhập nhiều người.</div>
 </div><div class="two"><div class="panel"><h2>Bảng màu Cyber tùy chỉnh</h2><p class="sub" style="margin:8px 0 17px">Thử màu trực tiếp; cập nhật toàn bộ giao diện, biểu đồ và trung tâm 3D.</p><div class="colorarea"><button class="swatch" style="background:#f34d64" data-color="#f34d64" title="Đỏ Cyber"></button><button class="swatch" style="background:#54a7ff" data-color="#54a7ff" title="Xanh điện tử"></button><button class="swatch" style="background:#a685ff" data-color="#a685ff" title="Tím AI"></button><button class="swatch" style="background:#32d8bb" data-color="#32d8bb" title="Xanh ngọc"></button><button class="swatch" style="background:#ffb86e" data-color="#ffb86e" title="Cam"></button><input type="color" class="colorinput" id="customColor" value="#f34d64" aria-label="Chọn màu khác"><span id="hexValue" class="mini">#F34D64</span></div><div style="margin-top:22px"><button class="btn" id="resetColor">Khôi phục mặc định</button></div></div><div class="panel"><h2>Thông tin & riêng tư</h2><div class="tablemini" style="margin-top:15px"><span>Backend AI</span><b>Cloudflare Worker (tùy chọn)</b><span>Dữ liệu API</span><b>GitHub công khai</b><span>Danh sách theo dõi</span><b>localStorage</b><span>Phân tích nâng cao</span><b>Quy tắc README + Gemini Online tùy chọn</b><span>AI offline</span><b>Không sử dụng</b><span>Hỗ trợ điện thoại</span><b>Responsive</b></div><div class="notice" style="margin-top:20px">Khi xóa dữ liệu trình duyệt hoặc đổi thiết bị, danh sách theo dõi có thể mất. Hãy xuất JSON để sao lưu.</div></div></div></section>
-<footer class="footer">AI REPO RADAR V2.6.1 • Dữ liệu trực tiếp: GitHub REST API • Biểu đồ: tổng sao từ tập kết quả • Không có dữ liệu giả lập trong bảng xếp hạng.</footer></main></div><div id="toast" class="toast hidden" role="status"></div>
+<footer class="footer">AI REPO RADAR V2.7 • Dữ liệu trực tiếp: GitHub REST API • Biểu đồ: tổng sao từ tập kết quả • Không có dữ liệu giả lập trong bảng xếp hạng.</footer></main></div><div id="toast" class="toast hidden" role="status"></div>
 
 <div class="repo-drawer-layer" id="repoDrawerLayer" aria-hidden="true">
  <div class="repo-drawer-shade" id="repoDrawerShade"></div>
@@ -512,20 +514,57 @@ window.inspectRepo=async function(full){
   $('retryRepo').onclick=()=>inspectRepo(full);
  }
 };
-const workerStorageKey='radar_worker_connection_v1';
+const workerStorageKey='radar_worker_connection_v1'; // giữ nguyên khóa lưu cũ để không mất kết nối khi nâng cấp
 const modelStorageKey='radar_gemini_model_v1';
 const defaultGeminiModel='gemini-3.8-flash';
 let workerConnection={url:'',token:''};
 try{const v=JSON.parse(localStorage.getItem(workerStorageKey)||'{}');if(v&&typeof v.url==='string'&&typeof v.token==='string')workerConnection=v}catch{}
 function validWorkerUrl(v){try{const u=new URL(v);return u.protocol==='https:'&&u.hostname.endsWith('.workers.dev')&&u.pathname.replace(/\/$/,'')===''&&u.username===''&&u.password===''}catch{return false}}
-function setupWorkerInputs(){if($('workerUrl'))$('workerUrl').value=workerConnection.url;if($('workerToken'))$('workerToken').value=workerConnection.token;if($('geminiModel')){let savedModel='';try{savedModel=localStorage.getItem(modelStorageKey)||''}catch{}$('geminiModel').value=/^[a-zA-Z0-9._-]{3,80}$/.test(savedModel)?savedModel:defaultGeminiModel}}
-$('saveWorker').onclick=()=>{const url=($('workerUrl').value||'').trim().replace(/\/$/,'');const token=($('workerToken').value||'').trim();const model=($('geminiModel').value||'').trim();if(!validWorkerUrl(url)){notify('Worker cần dùng URL HTTPS .workers.dev (không kèm đường dẫn).');return}if(token.length<32){notify('Mã truy cập riêng cần ít nhất 32 ký tự ngẫu nhiên.');return}if(!/^[a-zA-Z0-9._-]{3,80}$/.test(model)){notify('Tên model Gemini không hợp lệ.');return}workerConnection={url,token};try{localStorage.setItem(workerStorageKey,JSON.stringify(workerConnection));localStorage.setItem(modelStorageKey,model);notify('Đã lưu kết nối và tên model Gemini trên thiết bị này.')}catch{notify('Trình duyệt không cho lưu cài đặt. Kiểm tra chế độ riêng tư hoặc bộ nhớ website.')}};
-$('clearWorker').onclick=()=>{workerConnection={url:'',token:''};localStorage.removeItem(workerStorageKey);setupWorkerInputs();notify('Đã xóa thông tin kết nối Worker trên thiết bị này.')};
+function savedModel(){try{const v=localStorage.getItem(modelStorageKey)||'';return /^[a-zA-Z0-9._-]{3,80}$/.test(v)?v:defaultGeminiModel}catch{return defaultGeminiModel}}
+function updateSavedConnectionStatus(){const el=$('savedConnectionStatus');if(!el)return;const ok=validWorkerUrl(workerConnection.url)&&workerConnection.token.length>=32;el.textContent=ok?'✓ Đã ghi nhớ kết nối trên thiết bị này':'○ Chưa lưu kết nối trên thiết bị này';el.style.color=ok?'#55d6ae':''}
+function setupWorkerInputs(){if($('workerUrl'))$('workerUrl').value=workerConnection.url;if($('workerToken'))$('workerToken').value=workerConnection.token;if($('geminiModel'))$('geminiModel').value=savedModel();updateSavedConnectionStatus()}
+function workerDiagnosticMessage(err,status=0){
+ const raw=String(err?.message||err||'').slice(0,1200);
+ if(/User location is not supported for the API use|REGION_NOT_SUPPORTED|location.*not supported|geographic.*not supported/i.test(raw))return '🌐 VÙNG ĐỊA LÝ KHÔNG ĐƯỢC HỖ TRỢ\nGoogle Gemini trả FAILED_PRECONDITION: vị trí mà Google xác định cho yêu cầu API không được hỗ trợ. Đây KHÔNG phải lỗi hết hạn mức hoặc sai mã truy cập.\nVì Worker chạy trên hạ tầng Cloudflare, vùng Google nhìn thấy có thể khác vị trí của bạn. Không thể xác định chính xác vùng Google dùng chỉ từ địa chỉ Worker.\nCách xử lý: kiểm tra khu vực hỗ trợ của Google; báo Google nếu yêu cầu bị nhận nhầm vùng; hoặc chuyển sang nhà cung cấp AI online được phép tại nơi dịch vụ hoạt động. Không có cách đảm bảo đổi model hoặc đổi API key sẽ sửa được lỗi này.';
+ if(status===401)return '🔐 Mã truy cập riêng không trùng RADAR_ACCESS_TOKEN của Cloudflare. Kiểm tra mã đã lưu trên thiết bị này.';
+ if(status===403)return '🚫 Website hoặc tài khoản không có quyền truy cập API. Kiểm tra Origin trong Worker và quyền dự án Google.';
+ if(status===429)return '⏳ Hạn mức hoặc tốc độ API bị giới hạn (HTTP 429). Kiểm tra Usage trong Google AI Studio.';
+ if(status===503)return '⏳ Gemini hoặc Worker tạm thời không sẵn sàng (HTTP 503). Kiểm tra trạng thái dịch vụ; có thể thử lại sau.';
+ if(status===404)return '🔎 Không tìm thấy đường dẫn hoặc model (HTTP 404). Kiểm tra URL Worker và tên model.';
+ if(status===400)return '⚠️ Gemini từ chối yêu cầu (HTTP 400). Xem lý do cụ thể phía dưới; có thể do tham số/model/định dạng.'+(raw?'\nChi tiết: '+raw:'');
+ return 'Không thể hoàn thành yêu cầu: '+(raw||'Không rõ nguyên nhân.');
+}
+$('saveWorker').onclick=()=>{
+ const url=($('workerUrl').value||'').trim().replace(/\/$/,'');const token=($('workerToken').value||'').trim();const model=($('geminiModel').value||'').trim();
+ if(!validWorkerUrl(url)){notify('Worker cần dùng URL HTTPS .workers.dev (không kèm đường dẫn).');return}
+ if(token.length<32){notify('Mã truy cập riêng cần ít nhất 32 ký tự ngẫu nhiên.');return}
+ if(!/^[a-zA-Z0-9._-]{3,80}$/.test(model)){notify('Tên model Gemini không hợp lệ.');return}
+ try{localStorage.setItem(workerStorageKey,JSON.stringify({url,token}));localStorage.setItem(modelStorageKey,model);workerConnection={url,token};updateSavedConnectionStatus();notify('Đã ghi nhớ Worker, mã truy cập và model; không cần nhập lại trên thiết bị này.')}catch{notify('Không thể lưu: trình duyệt đang chặn lưu trữ hoặc đã hết dung lượng.')}
+};
+$('clearWorker').onclick=()=>{workerConnection={url:'',token:''};try{localStorage.removeItem(workerStorageKey);localStorage.removeItem(modelStorageKey)}catch{}setupWorkerInputs();$('workerDiagnostics').style.display='none';notify('Đã xóa kết nối và model đã lưu trên thiết bị này.')};
+// Đổi model và rời trang vẫn được lưu tự động nếu kết nối trước đó đã được lưu.
+$('geminiModel').addEventListener('change',()=>{const v=$('geminiModel').value.trim();if(!/^[a-zA-Z0-9._-]{3,80}$/.test(v))return;try{localStorage.setItem(modelStorageKey,v)}catch{}});
+$('testWorker').onclick=async()=>{
+ const output=$('workerDiagnostics');const btn=$('testWorker');output.style.display='block';
+ const {url,token}=workerConnection;
+ if(!validWorkerUrl(url)||!token){output.textContent='Chưa lưu kết nối. Nhập URL Worker và mã truy cập rồi bấm Lưu kết nối.';return}
+ btn.disabled=true;output.textContent='Đang kiểm tra kết nối với Cloudflare Worker…';
+ try{
+  const resp=await fetch(url+'/diagnostics',{headers:{Authorization:'Bearer '+token},cache:'no-store'});
+  const data=await resp.json().catch(()=>({}));
+  if(!resp.ok){if(resp.status===404){output.textContent='Worker đang chạy bản cũ, chưa có /diagnostics. Hãy cập nhật worker.js V2.7 ở Cloudflare; kết nối AI hiện tại vẫn có thể dùng.';return}output.textContent=workerDiagnosticMessage(new Error(data.error?.message||''),resp.status);return}
+  output.textContent='✓ Cloudflare Worker đã xác thực mã truy cập.\n'+
+  'Gemini API Key: '+(data.gemini_key_configured?'đã cấu hình':'CHƯA cấu hình')+'\n'+
+  'Vùng xử lý Cloudflare (tham khảo): '+(data.worker_region||'không xác định')+'\n'+
+  'Lưu ý: Vùng xử lý Cloudflare KHÔNG phải bằng chứng về khu vực Google dùng để xác định điều kiện API. Kiểm tra kết nối KHÔNG gọi Gemini; hãy thử phân tích để biết Google có chấp nhận không.';
+ }catch(err){output.textContent='Không kết nối được Worker từ trình duyệt. Kiểm tra Internet, URL và quyền CORS. '+String(err?.message||'')}
+ finally{btn.disabled=false}
+};
 setupWorkerInputs();
 async function runGeminiAnalysis(repo,readme){
  const el=$('geminiResult'),btn=$('runGemini');if(!el||!btn)return;
  const {url:workerUrl,token:workerToken}=workerConnection;if(!validWorkerUrl(workerUrl)||!workerToken){el.textContent='Chưa kết nối Cloudflare Worker. Vào Cài đặt & Màu sắc, nhập địa chỉ Worker và mã truy cập riêng rồi nhấn Lưu kết nối.';return}
- const model=($('geminiModel')?.value||defaultGeminiModel).trim();
+ const model=($('geminiModel')?.value||savedModel()).trim();
  if(!/^[a-zA-Z0-9._-]{3,80}$/.test(model)){el.textContent='Tên model không hợp lệ.';return}
  btn.disabled=true;el.textContent='Gemini đang đọc README công khai để tạo báo cáo bằng tiếng Việt…';
  const meta={name:repo.full_name,description:repo.description,topics:repo.topics,language:repo.language,license:repo.license?.spdx_id,stars:repo.stargazers_count,forks:repo.forks_count,pushed_at:repo.pushed_at};
@@ -539,14 +578,14 @@ README KHÔNG TIN CẬY (tối đa 24000 ký tự): ${(readme||'').slice(0,24000
  try{
   const resp=await fetch(workerUrl+'/analyze',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+workerToken},body:JSON.stringify({model,prompt})});
   const body=await resp.json().catch(()=>({}));
-  if(!resp.ok)throw Error((body.error?.message||'Gemini HTTP '+resp.status).slice(0,300));
+  if(!resp.ok){const reason=String(body.error?.message||'Gemini HTTP '+resp.status);const detail=workerDiagnosticMessage(new Error(reason),resp.status);throw Error(detail)}
   const answer=(body.candidates||[]).flatMap(c=>(c.content?.parts||[]).map(p=>p.text||'')).join('\n').trim();
   if(!answer)throw Error('Gemini không trả nội dung. Kiểm tra hạn mức và lựa chọn model.');
   const report=parseGeminiReport(answer);
   el.innerHTML=renderReport(report);
   reportCache[repo.full_name]={report,time:Date.now(),model};saveReportCache();
   btn.textContent='✦ Phân tích lại bằng AI';notify('Đã lưu báo cáo tiếng Việt trên trình duyệt này.');
- }catch(error){el.textContent='Không thể phân tích Gemini: '+error.message+'\nKiểm tra tên model, địa chỉ Worker, mã truy cập, hạn mức hoặc kết nối Internet. Bạn vẫn có thể dùng phần giải thích tiếng Việt cơ bản phía trên.'}finally{btn.disabled=false}
+ }catch(error){el.textContent='Không thể phân tích bằng Gemini.\n'+String(error?.message||error)+'\n\nBáo cáo giải thích tiếng Việt cơ bản vẫn dùng được. Không tự động gửi lại yêu cầu khi gặp lỗi khu vực.'}finally{btn.disabled=false}
 }
 
 $('clearFilters').onclick=()=>{$('minStars').value='';$('maxStars').value='';$('noFork').checked=true;notify('Đã xóa bộ lọc nâng cao. Bấm Tìm repo để cập nhật.')};
