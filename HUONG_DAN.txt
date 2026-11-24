@@ -1,28 +1,31 @@
-AI REPO RADAR V2.8 - GROQCLOUD ONLINE (KHÔNG OLLAMA)
+AI REPO RADAR V3.0 — KHÁM PHÁ REPO THEO CÔNG VIỆC
 
-Các thay đổi:
-- Giữ nguyên giao diện Cyber, tìm kiếm GitHub, theo dõi, biểu đồ và xem video demo.
-- Phân tích README qua GroqCloud API, báo cáo tiếng Việt cùng bố cục V2.7.
-- Giữ nguyên Cloudflare Worker, URL và RADAR_ACCESS_TOKEN đã lưu trên từng thiết bị.
-- Bỏ phụ thuộc Gemini. GEMINI_API_KEY cũ không cần xoá; thêm GROQ_API_KEY mới.
-- Default model: openai/gpt-oss-20b (nếu tài khoản/model được phép).
+Có 16 ngành nghề, 52 nhóm công việc và 156 nhu cầu cụ thể.
 
-CÁCH CÀI
-1. Truy cập https://console.groq.com/keys , đăng nhập và tạo API key.
-2. Trong Cloudflare > Workers & Pages > ai-repo-radar-api > Settings > Variables and Secrets > Production:
-   Add variable: Type Secret, Key GROQ_API_KEY, Value = key Groq vừa tạo. Nhấn Deploy.
-   Giữ RADAR_ACCESS_TOKEN, không cần chỉnh lại.
-3. Cloudflare > Edit code: sao lưu worker.js cũ, thay HOÀN TOÀN bằng worker.js V2.8 và Deploy.
-4. GitHub hoangtruongaudio/ai-repo-radar: thay file index.html gốc bằng index.html V2.8 rồi Commit.
-5. Vào https://hoangtruongaudio.github.io/ai-repo-radar/ ; Ctrl+F5.
-6. Cài đặt & Màu sắc: địa chỉ Worker và mã truy cập cũ sẽ được tự khôi phục. Chọn model openai/gpt-oss-20b, bấm Lưu. Nhấn Kiểm tra kết nối Worker để xác nhận 'Groq API Key: đã cấu hình'.
-7. Mở repo > AI phân tích > Phân tích chuyên sâu bằng AI.
+CẬP NHẬT WEBSITE
+1. Sao lưu file index.html hiện tại tại github.com/hoangtruongaudio/ai-repo-radar.
+2. Mở repository → Code → index.html → Edit (bút chì).
+3. Sao chép toàn bộ nội dung file index.html từ bản V3.0 và dán thay nội dung cũ.
+4. Nhấn Commit changes, chọn commit trực tiếp vào nhánh main.
+5. Kiểm tra Actions → pages build and deployment: cần có một lần triển khai MỚI thành công.
+6. Mở trang GitHub Pages trong cửa sổ ẩn danh; kiểm tra footer V3.0 và menu “Theo công việc”.
+   Nếu Pages vẫn cũ, kiểm tra Settings → Pages: Source=Deploy from a branch; Branch=main; Folder=/(root).
 
-LƯU Ý
-- API key và token không dán vào GitHub và không gửi cho người khác.
-- Free Plan có hạn mức; 429 nghĩa là hết tốc độ/hạn mức, không tự retry liên tục.
-- Hạn mức/model khả dụng theo tài khoản: https://console.groq.com/settings/limits và https://console.groq.com/docs/models
-- GroqCloud là dịch vụ AI suy luận đám mây; vẫn cần Internet. Chưa kiểm thử với key thật vì không có key của bạn.
-- Nếu báo model không khả dụng, hãy đối chiếu danh sách models được cấp cho dự án trong GroqCloud.
-- Worker chỉ nhận request từ domain GitHub Pages của bạn. Mã truy cập đang được lưu trên localStorage của từng thiết bị.
-- Gemini key cũ không được chương trình mới sử dụng, có thể giữ lại trên Cloudflare.
+CÁCH SỬ DỤNG
+- Vào Theo công việc → chọn ngành → chọn công việc → chọn một nhu cầu → Xem Top Repo.
+- Ứng dụng chuyển sang Xếp hạng Repo, tìm bằng GitHub Search API và mặc định sắp xếp theo tổng sao giảm dần.
+- Có thể sửa từ khóa tìm kiếm, ngôn ngữ, bộ lọc và cách sắp xếp.
+- Nút Phân tích tại từng repo mở giải thích tiếng Việt, AI GroqCloud, video demo nếu có, và README.
+- Danh mục là gợi ý theo từ khóa; repo được tìm thấy có thể không đáp ứng trọn vẹn nhu cầu. Cần đối chiếu README và giấy phép.
+- Repo có nhiều sao chưa chắc đáng tin cậy hay chạy tốt trên Windows. Số sao không phải lượt cài đặt.
+
+GROQ / CLOUDFLARE
+- Chỉ cần cập nhật index.html khi Cloudflare Worker đã chạy Groq V2.8.
+- Giữ nguyên GROQ_API_KEY và RADAR_ACCESS_TOKEN dưới dạng Secret trong Cloudflare.
+- Không đăng các API key hay mã truy cập lên GitHub.
+- Không cần xóa localStorage. Kết nối Worker cũ sẽ được giữ nếu dùng cùng tên miền và trình duyệt.
+- Nếu phân tích AI vẫn không chạy, vào Cài đặt & Màu sắc → Kiểm tra kết nối Worker.
+
+GIỚI HẠN KIỂM THỬ
+- Đã kiểm tra cú pháp JavaScript, cấu trúc danh mục và file ZIP.
+- Chưa kiểm thử trình duyệt hoàn chỉnh và chưa kết nối API Groq bằng key thật của người dùng.
