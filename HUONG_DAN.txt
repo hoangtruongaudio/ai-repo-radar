@@ -1,14 +1,9 @@
-AI REPO RADAR V3.1 — HƯỚNG DẪN
+AI REPO RADAR V3.1.1 — SỬA BỘ LỌC TỰ ĐỘNG
 
-1. Sao lưu file index.html trên GitHub trước khi sửa.
-2. Thay toàn bộ index.html trên GitHub branch main bằng index.html bản V3.1.
-3. Commit changes, kiểm tra GitHub Actions > pages build and deployment thành công.
-4. Mở website và vào Xếp hạng Repo; có bộ lọc 3 cấp Ngành nghề → Nhóm công việc → Nhu cầu.
-5. Chọn nhu cầu rồi nhấn Tìm theo nhu cầu. Có thể sửa truy vấn, lọc số sao, forks, cập nhật.
-6. Không cần thay Cloudflare Worker/GROQ_API_KEY nếu đã cấu hình phiên bản dùng Groq.
+1. Sao lưu index.html hiện tại.
+2. Thay nội dung index.html của GitHub repo hoangtruongaudio/ai-repo-radar bằng file index.html này.
+3. Commit changes vào main; kiểm tra GitHub Actions pages build and deployment thành công.
+4. Mở website, Ctrl+F5. Chọn Học tập & giáo dục -> Quản lý kiến thức, kết quả sẽ tự làm mới.
+5. Không cần thay worker.js, GROQ_API_KEY, RADAR_ACCESS_TOKEN.
 
-GIỚI HẠN
-- Đây là bản cải tiến bộ lọc; chưa phải đo lường đạt 9.0/10.
-- Repo được tìm từ GitHub Search bằng từ khóa; không có chứng thực tự động rằng repo làm được mọi tính năng.
-- Trending tăng sao thực tế chỉ đo khi có mốc dữ liệu cục bộ ở các thời điểm tương ứng.
-- Chưa thử trình duyệt/iPhone thật hoặc Groq API của bạn.
+LƯU Ý: Lọc theo ngành hoặc nhóm dùng từ khóa bao quát, còn chọn nhu cầu cụ thể dùng từ khóa chuyên sâu; số sao là tổng sao chứ không phải xu hướng tuần. API GitHub có thể giới hạn tốc độ tìm kiếm.
