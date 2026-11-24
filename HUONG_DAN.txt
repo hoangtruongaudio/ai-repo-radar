@@ -1,31 +1,14 @@
-AI REPO RADAR V3.0 — KHÁM PHÁ REPO THEO CÔNG VIỆC
+AI REPO RADAR V3.1 — HƯỚNG DẪN
 
-Có 16 ngành nghề, 52 nhóm công việc và 156 nhu cầu cụ thể.
+1. Sao lưu file index.html trên GitHub trước khi sửa.
+2. Thay toàn bộ index.html trên GitHub branch main bằng index.html bản V3.1.
+3. Commit changes, kiểm tra GitHub Actions > pages build and deployment thành công.
+4. Mở website và vào Xếp hạng Repo; có bộ lọc 3 cấp Ngành nghề → Nhóm công việc → Nhu cầu.
+5. Chọn nhu cầu rồi nhấn Tìm theo nhu cầu. Có thể sửa truy vấn, lọc số sao, forks, cập nhật.
+6. Không cần thay Cloudflare Worker/GROQ_API_KEY nếu đã cấu hình phiên bản dùng Groq.
 
-CẬP NHẬT WEBSITE
-1. Sao lưu file index.html hiện tại tại github.com/hoangtruongaudio/ai-repo-radar.
-2. Mở repository → Code → index.html → Edit (bút chì).
-3. Sao chép toàn bộ nội dung file index.html từ bản V3.0 và dán thay nội dung cũ.
-4. Nhấn Commit changes, chọn commit trực tiếp vào nhánh main.
-5. Kiểm tra Actions → pages build and deployment: cần có một lần triển khai MỚI thành công.
-6. Mở trang GitHub Pages trong cửa sổ ẩn danh; kiểm tra footer V3.0 và menu “Theo công việc”.
-   Nếu Pages vẫn cũ, kiểm tra Settings → Pages: Source=Deploy from a branch; Branch=main; Folder=/(root).
-
-CÁCH SỬ DỤNG
-- Vào Theo công việc → chọn ngành → chọn công việc → chọn một nhu cầu → Xem Top Repo.
-- Ứng dụng chuyển sang Xếp hạng Repo, tìm bằng GitHub Search API và mặc định sắp xếp theo tổng sao giảm dần.
-- Có thể sửa từ khóa tìm kiếm, ngôn ngữ, bộ lọc và cách sắp xếp.
-- Nút Phân tích tại từng repo mở giải thích tiếng Việt, AI GroqCloud, video demo nếu có, và README.
-- Danh mục là gợi ý theo từ khóa; repo được tìm thấy có thể không đáp ứng trọn vẹn nhu cầu. Cần đối chiếu README và giấy phép.
-- Repo có nhiều sao chưa chắc đáng tin cậy hay chạy tốt trên Windows. Số sao không phải lượt cài đặt.
-
-GROQ / CLOUDFLARE
-- Chỉ cần cập nhật index.html khi Cloudflare Worker đã chạy Groq V2.8.
-- Giữ nguyên GROQ_API_KEY và RADAR_ACCESS_TOKEN dưới dạng Secret trong Cloudflare.
-- Không đăng các API key hay mã truy cập lên GitHub.
-- Không cần xóa localStorage. Kết nối Worker cũ sẽ được giữ nếu dùng cùng tên miền và trình duyệt.
-- Nếu phân tích AI vẫn không chạy, vào Cài đặt & Màu sắc → Kiểm tra kết nối Worker.
-
-GIỚI HẠN KIỂM THỬ
-- Đã kiểm tra cú pháp JavaScript, cấu trúc danh mục và file ZIP.
-- Chưa kiểm thử trình duyệt hoàn chỉnh và chưa kết nối API Groq bằng key thật của người dùng.
+GIỚI HẠN
+- Đây là bản cải tiến bộ lọc; chưa phải đo lường đạt 9.0/10.
+- Repo được tìm từ GitHub Search bằng từ khóa; không có chứng thực tự động rằng repo làm được mọi tính năng.
+- Trending tăng sao thực tế chỉ đo khi có mốc dữ liệu cục bộ ở các thời điểm tương ứng.
+- Chưa thử trình duyệt/iPhone thật hoặc Groq API của bạn.
